@@ -107,7 +107,9 @@ Then start the project by running the following commands:
 
 ```bash
 # install dependencies if you haven't done so in the previous step.
-bun install
+# macOS (Rosetta/x64) users should pull the x64 Rollup binary explicitly
+bun install --cpu x64
+# Apple Silicon (arm64) can omit the flag
 
 # start running the project
 bun run dev
