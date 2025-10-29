@@ -6,6 +6,9 @@
       "dependencies": {
         "astro": "^5.15.2",
       },
+      "devDependencies": {
+        "@rollup/rollup-darwin-x64": "^4.52.5",
+      },
     },
   },
   "packages": {
