@@ -14,44 +14,55 @@ const pageDescription = resume.summary.join(" ");
   <Header />
   <main id="main-content" data-layout="resume" class="space-y-16 pb-16">
     <section id="summary" class="pt-12">
-      <div class="flex flex-col gap-10 sm:gap-12">
+      <div class="flex flex-col gap-12">
         <div
           class:list={[
-            "flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between",
-            resume.photo?.src && "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(140px,180px)] lg:items-start lg:gap-12",
+            "flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between",
+            resume.photo?.src &&
+              "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(200px,240px)] lg:items-center lg:gap-16",
           ]}
         >
-          <div class="flex flex-col lg:pe-8">
-            <h1 class="text-4xl font-bold sm:text-5xl">{resume.name}</h1>
-            <p class="mt-2 text-xl font-medium text-foreground/80">{resume.title}</p>
-            <div class="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:gap-6">
-              <span class="font-semibold uppercase tracking-wide text-foreground/70">{resume.location}</span>
-              <a class="hover:text-accent" href={`mailto:${resume.email}`}>{resume.email}</a>
-              <a class="hover:text-accent" href={resume.website} target="_blank" rel="noreferrer">{resume.website}</a>
+          <div class="flex flex-col gap-6 lg:pe-10">
+            <div class="space-y-2">
+              <h1 class="text-4xl font-bold sm:text-5xl">{resume.name}</h1>
+              <p class="text-xl font-medium text-foreground/80 sm:text-2xl">{resume.title}</p>
             </div>
-            <div class="mt-4"><Socials /></div>
+
+            <div class="flex flex-wrap items-center gap-3 text-sm text-foreground/70">
+              <span class="inline-flex items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1 font-semibold uppercase tracking-wide">
+                {resume.location}
+              </span>
+            </div>
+
+            <div class="pt-2"><Socials /></div>
           </div>
 
           {resume.photo?.src && (
             <figure
-              class="mx-auto aspect-square w-full max-w-[110px] overflow-hidden rounded-md shadow-[0_14px_42px_-18px_rgba(0,0,0,0.7)] sm:max-w-[140px] lg:justify-self-end"
+              class="relative mx-auto flex w-full max-w-[220px] justify-center rounded-3xl border border-border/70 bg-gradient-to-br from-background via-background to-background/70 p-3 shadow-[0_28px_60px_-24px_rgba(15,23,42,0.65)] sm:max-w-[240px] lg:justify-self-end"
             >
-              <img
-                src={resume.photo.src}
-                alt={resume.photo.alt ?? resume.name}
-                width={resume.photo.width ?? 320}
-                height={resume.photo.height ?? 320}
-                loading="lazy"
-                class="h-full w-full rounded-sm object-cover"
-              />
+              <div class="relative aspect-[5/6] w-full overflow-hidden rounded-2xl">
+                <img
+                  src={resume.photo.src}
+                  alt={resume.photo.alt ?? resume.name}
+                  width={resume.photo.width ?? 320}
+                  height={resume.photo.height ?? 320}
+                  loading="lazy"
+                  class="h-full w-full object-cover"
+                />
+                <div class="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" aria-hidden="true" />
+              </div>
             </figure>
           )}
         </div>
 
-        <div class="space-y-4 text-base leading-relaxed text-foreground/90">
-          {resume.summary.map(paragraph => (
-            <p>{paragraph}</p>
-          ))}
+        <div class="overflow-hidden rounded-3xl border border-border/70 bg-background/80 p-8 shadow-[0_32px_80px_-30px_rgba(15,23,42,0.55)]">
+          <h2 class="text-xs font-semibold uppercase tracking-[0.35em] text-foreground/60">Professional Summary</h2>
+          <div class="mt-5 space-y-4 text-base leading-relaxed text-foreground/90">
+            {resume.summary.map(paragraph => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </div>
     </section>
