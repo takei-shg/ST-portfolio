@@ -1,9 +1,17 @@
+import shigeResumeImage from "@/assets/images/shige-resume.png";
+
 export const resume = {
   name: "Shigekazu Takei",
   title: "Senior Software Engineer · Cloud Architect",
   location: "Tokyo, Japan",
   email: "takei.shg@gmail.com",
   website: "https://github.com/takei-shg",
+  photo: {
+    src: shigeResumeImage.src,
+    width: shigeResumeImage.width,
+    height: shigeResumeImage.height,
+    alt: "Portrait of Shigekazu Takei",
+  },
   profiles: [
     { label: "GitHub", url: "https://github.com/takei-shg" },
     { label: "Twitter", url: "https://twitter.com/takeishg" },

@@ -14,18 +14,45 @@ const pageDescription = resume.summary.join(" ");
   <Header />
   <main id="main-content" data-layout="resume" class="space-y-16 pb-16">
     <section id="summary" class="pt-12">
-      <h1 class="text-4xl font-bold sm:text-5xl">{resume.name}</h1>
-      <p class="mt-2 text-xl font-medium text-foreground/80">{resume.title}</p>
-      <div class="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:gap-6">
-        <span class="font-semibold uppercase tracking-wide text-foreground/70">{resume.location}</span>
-        <a class="hover:text-accent" href={`mailto:${resume.email}`}>{resume.email}</a>
-        <a class="hover:text-accent" href={resume.website} target="_blank" rel="noreferrer">{resume.website}</a>
-      </div>
-      <div class="mt-4"><Socials /></div>
-      <div class="mt-8 space-y-4 text-base leading-relaxed text-foreground/90">
-        {resume.summary.map(paragraph => (
-          <p>{paragraph}</p>
-        ))}
+      <div class="flex flex-col gap-10 sm:gap-12">
+        <div
+          class:list={[
+            "flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between",
+            resume.photo?.src && "lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(140px,180px)] lg:items-start lg:gap-12",
+          ]}
+        >
+          <div class="flex flex-col lg:pe-8">
+            <h1 class="text-4xl font-bold sm:text-5xl">{resume.name}</h1>
+            <p class="mt-2 text-xl font-medium text-foreground/80">{resume.title}</p>
+            <div class="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:gap-6">
+              <span class="font-semibold uppercase tracking-wide text-foreground/70">{resume.location}</span>
+              <a class="hover:text-accent" href={`mailto:${resume.email}`}>{resume.email}</a>
+              <a class="hover:text-accent" href={resume.website} target="_blank" rel="noreferrer">{resume.website}</a>
+            </div>
+            <div class="mt-4"><Socials /></div>
+          </div>
+
+          {resume.photo?.src && (
+            <figure
+              class="mx-auto aspect-square w-full max-w-[110px] overflow-hidden rounded-md shadow-[0_14px_42px_-18px_rgba(0,0,0,0.7)] sm:max-w-[140px] lg:justify-self-end"
+            >
+              <img
+                src={resume.photo.src}
+                alt={resume.photo.alt ?? resume.name}
+                width={resume.photo.width ?? 320}
+                height={resume.photo.height ?? 320}
+                loading="lazy"
+                class="h-full w-full rounded-sm object-cover"
+              />
+            </figure>
+          )}
+        </div>
+
+        <div class="space-y-4 text-base leading-relaxed text-foreground/90">
+          {resume.summary.map(paragraph => (
+            <p>{paragraph}</p>
+          ))}
+        </div>
       </div>
     </section>
 
