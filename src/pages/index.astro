@@ -1,121 +1,142 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
 import Hr from "@/components/Hr.astro";
-import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
-import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
+import { resume } from "@/data/resume";
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const pageTitle = `${resume.name} · Resume`;
+const pageDescription = resume.summary.join(" ");
 ---
 
-<Layout>
+<Layout title={pageTitle} description={pageDescription}>
   <Header />
-  <main id="main-content" data-layout="index">
-    <section id="hero" class="pt-8 pb-6">
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
-
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check
-        <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.
-      </p>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex flex-col sm:flex-row sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
-          </div>
-        )
-      }
+  <main id="main-content" data-layout="resume" class="space-y-16 pb-16">
+    <section id="summary" class="pt-12">
+      <h1 class="text-4xl font-bold sm:text-5xl">{resume.name}</h1>
+      <p class="mt-2 text-xl font-medium text-foreground/80">{resume.title}</p>
+      <div class="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:gap-6">
+        <span class="font-semibold uppercase tracking-wide text-foreground/70">{resume.location}</span>
+        <a class="hover:text-accent" href={`mailto:${resume.email}`}>{resume.email}</a>
+        <a class="hover:text-accent" href={resume.website} target="_blank" rel="noreferrer">{resume.website}</a>
+      </div>
+      <div class="mt-4"><Socials /></div>
+      <div class="mt-8 space-y-4 text-base leading-relaxed text-foreground/90">
+        {resume.summary.map(paragraph => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
     </section>
 
     <Hr />
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured" class="pt-12 pb-6">
-            <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-            <ul>
-              {featuredPosts.map(data => (
-                <Card variant="h3" {...data} />
+    <section id="skills" aria-labelledby="skills-heading">
+      <h2 id="skills-heading" class="text-2xl font-semibold uppercase tracking-wide">
+        Key Skills
+      </h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2">
+        {resume.skills.map(skill => (
+          <article class="rounded-lg border border-border/60 bg-background/60 p-5">
+            <h3 class="text-lg font-semibold text-accent">{skill.category}</h3>
+            <ul class="mt-3 space-y-2 text-sm leading-relaxed">
+              {skill.items.map(item => (
+                <li>{item}</li>
               ))}
             </ul>
-          </section>
-          {recentPosts.length > 0 && <Hr />}
-        </>
-      )
-    }
+          </article>
+        ))}
+      </div>
+    </section>
 
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
-            )}
-          </ul>
-        </section>
-      )
-    }
+    <Hr />
 
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
+    <section id="experience" aria-labelledby="experience-heading">
+      <h2 id="experience-heading" class="text-2xl font-semibold uppercase tracking-wide">
+        Work Experience
+      </h2>
+      <div class="mt-8 space-y-10">
+        {resume.experiences.map(experience => (
+          <article class="relative border-s-2 border-border/70 ps-6">
+            <div class="absolute -start-[13px] top-1 size-3 rounded-full border border-border bg-background" aria-hidden="true" />
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+              <div>
+                <h3 class="text-xl font-semibold text-accent">{experience.role}</h3>
+                <p class="text-sm uppercase tracking-wide text-foreground/70">
+                  {experience.company} · {experience.location}
+                </p>
+              </div>
+              <span class="text-sm font-semibold text-foreground/80">{experience.period}</span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-foreground/90">{experience.description}</p>
+            <ul class="mt-3 ms-4 list-disc space-y-2 text-sm leading-relaxed">
+              {experience.highlights.map(highlight => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+            <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-foreground/60">
+              Tech:
+              <span class="ms-1 font-normal normal-case text-foreground/80">
+                {experience.technologies.join(", ")}
+              </span>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <Hr />
+
+    <section id="education" aria-labelledby="education-heading">
+      <h2 id="education-heading" class="text-2xl font-semibold uppercase tracking-wide">
+        Education
+      </h2>
+      <ul class="mt-6 space-y-6">
+        {resume.education.map(edu => (
+          <li class="rounded-lg border border-border/60 bg-background/60 p-5">
+            <h3 class="text-lg font-semibold text-accent">{edu.degree}</h3>
+            <p class="mt-1 text-sm text-foreground/80">{edu.school}</p>
+            <p class="text-xs uppercase tracking-wide text-foreground/60">{edu.period}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <Hr />
+
+    <section id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="text-2xl font-semibold uppercase tracking-wide">
+        Contact
+      </h2>
+      <div class="mt-6 grid gap-4 text-sm sm:grid-cols-2">
+        <dl class="space-y-3">
+          <div>
+            <dt class="font-semibold uppercase tracking-wide text-foreground/70">Location</dt>
+            <dd>{resume.location}</dd>
+          </div>
+          <div>
+            <dt class="font-semibold uppercase tracking-wide text-foreground/70">Email</dt>
+            <dd>
+              <a class="hover:text-accent" href={`mailto:${resume.email}`}>
+                {resume.email}
+              </a>
+            </dd>
+          </div>
+        </dl>
+        <dl class="space-y-3">
+          {resume.profiles.map(profile => (
+            <div>
+              <dt class="font-semibold uppercase tracking-wide text-foreground/70">{profile.label}</dt>
+              <dd>
+                <a class="hover:text-accent" href={profile.url} target="_blank" rel="noreferrer">
+                  {profile.url}
+                </a>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
   </main>
   <Footer />
 </Layout>
-
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const indexLayout = (document.querySelector("#main-content") as HTMLElement)
-      ?.dataset?.layout;
-    if (indexLayout) {
-      sessionStorage.setItem("backUrl", "/");
-    }
-  });
-</script>
